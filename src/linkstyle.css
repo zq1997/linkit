@@ -1,0 +1,72 @@
+@keyframes flash_animation {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.linkit_unchecked {
+    background-color: black;
+    color: white !important;
+}
+
+.linkit_checked {
+    color: white !important;
+}
+
+.linkit_valid {
+    background: darkgreen !important;
+}
+
+.linkit_invalid {
+    background: darkred !important;
+}
+
+.linkit_redirected {
+    animation: linear flash_animation 200ms infinite alternate-reverse;
+}
+
+.linkit_exception {
+    background: orange !important;
+}
+
+#linkit_box {
+    z-index: 2147483647;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    padding: 20pt;
+}
+
+#linkit_box > div {
+    min-width: 100pt;
+    padding: 5pt;
+    box-shadow: 10pt 10pt 5pt gray;
+    background: silver;
+    user-select: none;
+    cursor: move;
+    text-align: left;
+    font-size: 12pt;
+}
+
+#linkit_box p, label, input {
+    margin: 0px;
+    padding: 0px;
+}
+
+#linkit_box button {
+    background-color: gray;
+    box-shadow: none;    
+    border-style: none;
+}
+
+#linkit_box .count_tr {
+    visibility: collapse;
+}
+
+#linkit_box .count_tr td {
+    padding: 0pt 5pt
+}

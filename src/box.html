@@ -1,0 +1,37 @@
+<div id='linkit_box'>
+    <div>
+        <p id='linkit_close' style='text-align: right;'>&#10799;</p>
+        <p><label><input id='linkit_no_cache' type="checkbox" />禁用缓存</label></p>
+        <p>超时：<input id='linkit_timeout' type="number" value="10.0" style="width: 50pt" />秒</p>
+
+        <button id='linkit_start'>开始</button>
+        <button id='linkit_export' style="visibility: hidden;">导出csv</button>
+
+        <table style='width: 100%;'>
+            <tr class='count_tr linkit_unchecked'>
+                <td>待检查</td>
+                <td id='linkit_count_unchecked'>0</td>
+            </tr>
+            <tr class='count_tr linkit_checked linkit_valid'>
+                <td>有效链接</td>
+                <td id='linkit_count_direct_valid'>0</td>
+            </tr>
+            <tr class='count_tr linkit_checked linkit_redirected linkit_valid'>
+                <td>重定向→有效链接</td>
+                <td id='linkit_count_redirected_valid'>0</td>
+            </tr>
+            <tr class='count_tr linkit_checked linkit_invalid'>
+                <td>无效链接</td>
+                <td id='linkit_count_direct_invalid'>0</td>
+            </tr>
+            <tr class='count_tr linkit_checked linkit_redirected linkit_invalid'>
+                <td>重定向→无效链接</td>
+                <td id='linkit_count_redirected_invalid'>0</td>
+            </tr>
+            <tr class='count_tr linkit_checked linkit_exception'>
+                <td>检查出错</td>
+                <td id='linkit_count_exception'>0</td>
+            </tr>
+        </table>
+    </div>
+</div>

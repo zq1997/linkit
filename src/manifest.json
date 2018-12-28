@@ -1,0 +1,25 @@
+{
+    "manifest_version": 2,
+    "minimum_chrome_version": "35",
+    "name": "linkit",
+    "version": "1.0.0",
+    "description": "网页链接有效性检查",
+    "icons": {
+        "128": "icon.png"
+    },
+    "permissions": ["contextMenus", "activeTab", "<all_urls>"],
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_title": "网页链接有效性检查"
+    },
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "css": ["linkstyle.css"],
+        "run_at": "document_end"
+    }],
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "homepage_url": "https://github.com/zq-97/linkit"
+}
