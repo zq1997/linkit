@@ -47,7 +47,7 @@ function makeBox(html) {
     document.getElementById('linkit_close').addEventListener('click', function () {
         box.style.visibility = 'hidden';
     });
-    box.firstElementChild.onmousedown = function (e) {
+    box.onmousedown = function (e) {
         e = e || window.event;
         var x = e.clientX;
         var y = e.clientY;

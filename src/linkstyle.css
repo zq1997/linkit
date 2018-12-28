@@ -36,12 +36,10 @@
 #linkit_box {
     z-index: 2147483647;
     position: fixed;
-    right: 0px;
-    top: 0px;
-    padding: 20pt;
-}
+    right: 20pt;
+    top: 20pt;
+    margin: 0px !important; /* 必须无margin */
 
-#linkit_box > div {
     min-width: 100pt;
     padding: 5pt;
     box-shadow: 10pt 10pt 5pt gray;
