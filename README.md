@@ -1,5 +1,12 @@
 # chrome插件：检查网页链接有效性
 
+## 安装
+
+- [商店安装](https://chrome.google.com/webstore/detail/ckphjpoieajofmlhnfpiloiondkhpcja/publish-review)(审核中)
+
+- 源码安装：进入[chrome插件管理页](chrome://extensions/)开启开发者模式，【加载已解压的扩展程序】，选择`src`目录完成安装。
+  
+
 ## 开始
 
 ![1545981633632](README.assets/1545981633632.png)
