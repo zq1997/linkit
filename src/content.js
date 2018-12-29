@@ -184,7 +184,8 @@ function showResult(url) {
 
     var results = [];
     responses.forEach(function (r) {
-        if (r.requestUrl === url) {
+        // 右键获取的url会自动encode，需要处理
+        if (r.requestUrl === url || r.requestUrl === decodeURIComponent(url)) {
             for (var i = 0; i < results.length; i++) {
                 if (JSON.stringify(r) === JSON.stringify(results[i])) {
                     return;
