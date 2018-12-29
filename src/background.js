@@ -1,6 +1,10 @@
 var boxHtml = null;
 var responseCache = {};
 
+var requestQueue = [];
+var busyRequests = 0;
+var MAX_BUSY_REQUESTS = 10;
+
 function browserActionOnLick(tab) {
     if (boxHtml === null) {
         chrome.runtime.getPackageDirectoryEntry(function (root) {
@@ -29,7 +33,10 @@ chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         switch (request.cmd) {
             case 'checkUrl':
-                checkUrl(request.url, request.noCache, request.timeout, sendResponse);
+                request.sendResponse = sendResponse;
+                requestQueue.push(request);
+                dequeueCheck();
+                // checkUrl(request.url, request.noCache, request.timeout, sendResponse);
                 break;
             default:
                 break;
@@ -38,51 +45,70 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-function checkUrl(url, noCache, timeout, sendResponse) {
-    if (!noCache) {
-        cache = responseCache[url];
+function dequeueCheck() {
+    if (requestQueue.length <= 0 || busyRequests >= MAX_BUSY_REQUESTS) {
+        return;
+    }
+
+    var request = requestQueue.shift();
+    if (!request.noCache) {
+        cache = responseCache[request.url];
         if (undefined !== cache) {
-            sendResponse(cache);
-            console.log(url);
+            request.sendResponse(cache);
+            setTimeout(dequeueCheck, 0);
             return;
         }
     }
+    
+    busyRequests += 1;
+    var nextHasFired = false;
 
-    function responseAndCache(exception, responseUrl = null, status = null, statusText = null) {
+    function fireNext() {
+        if (!nextHasFired) {
+            nextHasFired = true;
+            busyRequests -= 1;
+            dequeueCheck();
+        }
+    }
+
+    function finish(exception, responseUrl = null, status = null, statusText = null) {
         var response = {
             exception: exception,
             status: status,
             statusText: statusText,
             redirected: null,
             valid: null,
-            requestUrl: url,
+            requestUrl: request.url,
             responseUrl: responseUrl,
         };
         if (exception === null) {
-            response.redirected = responseUrl !== url;
+            response.redirected = responseUrl !== request.url;
             response.valid = status < 400;
         }
-        sendResponse(response);
-        responseCache[url] = response;
+        responseCache[request.url] = response;
+        request.sendResponse(response);
+        fireNext();
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.timeout = parseInt(timeout * 1000);
+    xhr.timeout = parseInt(request.timeout * 1000);
 
     xhr.onreadystatechange = function () {
         if (this.readyState === this.HEADERS_RECEIVED) {
-            responseAndCache(null, this.responseURL, this.status, this.statusText);
+            finish(null, this.responseURL, this.status, this.statusText);
         }
     };
     xhr.ontimeout = function () {
-        responseAndCache('xhr_timeout');
+        finish('xhr_timeout');
     };
     xhr.onerror = function () {
-        responseAndCache('xhr_error');
+        finish('xhr_error');
     };
 
-    xhr.open('HEAD', url, true);
+    xhr.open('HEAD', request.url, true);
     xhr.send();
+    // 1秒钟后一定启动下一个请求，防止太多请求同时处于超时状态
+    setTimeout(fireNext, 1000);
 }
 
 chrome.contextMenus.create({

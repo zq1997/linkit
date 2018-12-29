@@ -85,8 +85,8 @@ function start() {
     var noCache = document.getElementById("linkit_no_cache").checked;
     var timeout_input = document.getElementById("linkit_timeout");
     var timeout = parseFloat(timeout_input.value);
-    timeout = 1 < timeout ? timeout : 1;
-    timeout = timeout < 60 ? timeout : 60;
+    timeout = 0 < timeout ? timeout : 0;
+    timeout = timeout < 600 ? timeout : 600;
     timeout_input.value = timeout;
 
 
